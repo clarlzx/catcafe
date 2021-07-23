@@ -17,6 +17,7 @@ import DeadCatScreen from "./screens/DeadCatScreen";
 import CreateRoomScreen from "./screens/CreateRoomScreen";
 import MyCatsScreen from "./screens/MyCatsScreen";
 import ProfilePage from "./screens/ProfilePage";
+import GeneratedCodeScreen from "./screens/GeneratedCodeScreen";
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs();
@@ -104,6 +105,13 @@ export default function App() {
         <Stack.Screen
           name="Create Room"
           component={CreateRoomScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Generated Code"
+          component={GeneratedCodeScreen}
           options={{
             headerShown: false,
           }}
