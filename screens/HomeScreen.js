@@ -6,13 +6,17 @@ import { useBackHandler } from "@react-native-community/hooks";
 export default function HomeScreen({ navigation, route }) {
   const { userData } = route.params;
 
-  // useBackHandler(() => {
-  //   Alert.alert("", "Do you want to exit this app?", [
-  //     { text: "Ok", onPress: () => BackHandler.exitApp() },
-  //     { text: "Cancel" },
-  //   ]);
-  //   return true;
-  // });
+  useBackHandler(() => {
+    if (navigation.isFocused()) {
+      Alert.alert("", "Do you want to exit this app?", [
+        { text: "Ok", onPress: () => BackHandler.exitApp() },
+        { text: "Cancel" },
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  });
 
   return (
     <View style={styles.container}>
