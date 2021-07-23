@@ -38,7 +38,7 @@ export default function LobbyScreen({ navigation, route }) {
       <Text>Please wait for everyone to enter the room.</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Room")}
+        onPress={() => navigation.navigate("Room", { id: id })}
       >
         <Text style={styles.text}>Enter</Text>
       </TouchableOpacity>
