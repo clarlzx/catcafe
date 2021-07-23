@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
+import firebase from "../database/firebaseDB";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation, route }) {
+  const { userData } = route.params;
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.profileButton}
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() => navigation.navigate("Profile", { userData: userData })}
       >
         <Icon
           type="ionicon"
@@ -18,6 +21,9 @@ export default function HomeScreen({ navigation }) {
           reverse
         />
       </TouchableOpacity>
+
+      <Text style={styles.header}>Welcome {userData.userName}</Text>
+
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Group Code")}
@@ -59,4 +65,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   profileButton: {},
+  header: {
+    fontSize: 20,
+  },
 });

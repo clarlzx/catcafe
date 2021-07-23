@@ -10,13 +10,14 @@ import {
   BackHandler,
 } from "react-native";
 import { useBackHandler } from "@react-native-community/hooks";
-import { FontAwesome } from "@expo/vector-icons";
+import firebase from "../database/firebaseDB";
 
 //TODO: Data validation
 
 export default function LoginScreen({ navigation, route }) {
   const [userName, setUserName] = useState("");
   const [canLogin, setCanLogin] = useState(false);
+  const [userData, setUserData] = useState({});
 
   useBackHandler(() => {
     if (navigation.isFocused()) {
@@ -45,6 +46,25 @@ export default function LoginScreen({ navigation, route }) {
     }
   });
 
+  function onLogin() {
+    const user = firebase.auth().currentUser;
+    const db = firebase.firestore();
+
+    if (user !== null) {
+      const uid = user.uid;
+      const userData = {
+        userName: userName,
+        loggedInBefore: true,
+        uid: uid,
+      };
+      db.collection("users").doc(uid).set(userData, { merge: true });
+      console.log(userData);
+      setUserData(userData);
+
+      navigation.navigate("Home", { userData: userData });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -63,16 +83,13 @@ export default function LoginScreen({ navigation, route }) {
                 onChangeText={setUserName}
                 value={userName}
                 placeholder="Your User Name"
-                maxLength={40}
+                maxLength={20}
                 placeholderTextColor={`rgba(255,255,255,0.7)`}
               ></TextInput>
             </View>
 
             {canLogin && (
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => navigation.navigate("Home")}
-              >
+              <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
                 <Text style={styles.loginButtonText}>Login</Text>
               </TouchableOpacity>
             )}

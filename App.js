@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, LogBox } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -19,18 +19,18 @@ import MyCatsScreen from "./screens/MyCatsScreen";
 import ProfilePage from "./screens/ProfilePage";
 
 const Stack = createStackNavigator();
-
+LogBox.ignoreAllLogs();
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Loading"
           component={LoadingScreen}
           options={{
             headerShown: false,
           }}
-        /> */}
+        />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
