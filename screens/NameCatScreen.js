@@ -13,7 +13,7 @@ import Constants from "expo-constants";
 import Cat from "../components/Cat";
 
 export default function NameCatScreen({ navigation, route }) {
-  const { catType, id, userData } = route.params;
+  const { catType, id, userData, people } = route.params;
   const [name, setName] = useState("");
 
   return (
@@ -37,6 +37,7 @@ export default function NameCatScreen({ navigation, route }) {
               name: name,
               id: id,
               userData: userData,
+              people: people,
             })
           }
         >
