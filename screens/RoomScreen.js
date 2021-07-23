@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function RoomScreen({ navigation }) {
+export default function RoomScreen({ navigation, route }) {
+  const { id } = route.params;
+
   return (
     <View style={styles.container}>
       <Text>Hi I am a room where cats roam</Text>

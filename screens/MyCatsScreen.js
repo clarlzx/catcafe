@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function MyCatsScreen({ navigation }) {
+export default function MyCatsScreen({ navigation, route }) {
+  const { username } = route.params;
   return (
     <View style={styles.container}>
       <Text>My cats</Text>
