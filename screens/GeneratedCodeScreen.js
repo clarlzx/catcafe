@@ -61,15 +61,15 @@ export default function GeneratedCodeScreen({ navigation, route }) {
   }
 
   useEffect(() => {
-    db.add({
-      id: result,
-      minHour: minHour,
-      minMin: minMin,
-      maxHour: maxHour,
-      maxMin: maxMin,
-      people: people,
-      userData: { username: userData.userName },
-    })
+    db.doc(result)
+      .set({
+        id: result,
+        minHour: minHour,
+        minMin: minMin,
+        maxHour: maxHour,
+        maxMin: maxMin,
+        people: people,
+      })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       })
@@ -87,7 +87,12 @@ export default function GeneratedCodeScreen({ navigation, route }) {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Choose Cat")}
+        onPress={() =>
+          navigation.navigate("Choose Cat", {
+            id: result,
+            userData: userData,
+          })
+        }
       >
         <Text style={styles.buttonText}>Choose your cat!</Text>
       </TouchableOpacity>

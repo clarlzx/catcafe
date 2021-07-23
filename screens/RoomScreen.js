@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import firebase from '../database/firebaseDB';
 import Cat from '../components/Cat';
 
-export default function RoomScreen({ navigation }) {
+export default function RoomScreen({ navigation, route }) {
+  const { id } = route.params;
 
   const [userData,setUserData] = useState([]);
 

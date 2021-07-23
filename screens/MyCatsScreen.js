@@ -3,12 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import firebase from '../database/firebaseDB';
 import Cat from '../components/Cat';
 
-export default function MyCatsScreen({ navigation }) {
-
-  firebase.firestore().collection("users").doc("cXtbyzUpkWRE3IaxI2Eiwprim6v1").get().then((doc) => {
-    myCats = doc.data().myCats;
-  })
-
+export default function MyCatsScreen({ navigation, route }) {
+  const { username } = route.params;
   return (
     <View style={styles.container}>
       <Text style={{paddingTop: 50}}>My cats</Text>

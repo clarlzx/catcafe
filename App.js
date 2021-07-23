@@ -85,7 +85,7 @@ export default function App() {
           name="Chat"
           component={ChatScreen}
           options={{
-            headerShown: false,
+            headerTitle: null,
           }}
         />
         <Stack.Screen
