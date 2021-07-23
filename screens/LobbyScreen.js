@@ -3,17 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import firebase from "../database/firebaseDB";
 
 export default function LobbyScreen({ navigation, route }) {
-  const { catType, name, id } = route.params;
+  const { catType, name, id, userData } = route.params;
 
   const db = firebase.firestore().collection("rooms");
   var roomRef = db.doc(id);
   useEffect(() => {
     roomRef.set(
       {
-        userData: {
-          catType: catType,
-          catName: name,
-        },
+        userData: [
+          { username: userData.userName, catType: catType, catName: name },
+        ],
       },
       { merge: true }
     );
