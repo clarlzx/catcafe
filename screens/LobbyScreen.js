@@ -6,14 +6,19 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Alert,
+  BackHandler,
 } from "react-native";
 import firebase from "../database/firebaseDB";
+import { useBackHandler } from "@react-native-community/hooks";
 import Constants from "expo-constants";
 import Cat from "../components/Cat";
 
 export default function LobbyScreen({ navigation, route }) {
   const { catType, name, id, userData, people } = route.params;
+  const username = userData.userName;
 
+  //Save selected data into firebase
   const db = firebase.firestore().collection("rooms");
   var roomRef = db.doc(id);
   useEffect(() => {
@@ -22,8 +27,13 @@ export default function LobbyScreen({ navigation, route }) {
       if (retrievedUserData == undefined) {
         roomRef.set(
           {
+            isLocked: false,
             userData: [
-              { username: userData.userName, catType: catType, catName: name },
+              {
+                username: userData.userName,
+                catType: catType,
+                catName: name,
+              },
             ],
           },
           { merge: true }
@@ -31,6 +41,7 @@ export default function LobbyScreen({ navigation, route }) {
       } else {
         roomRef.set(
           {
+            isLocked: false,
             userData: [
               { username: userData.userName, catType: catType, catName: name },
               ...retrievedUserData,
@@ -42,25 +53,39 @@ export default function LobbyScreen({ navigation, route }) {
     });
   }, []);
 
+  //Conditional entering of the rooms
   function enterWhenFull() {
-    // if (data.length == people) {
-    //   return (
-    //     <TouchableOpacity
-    //       style={styles.button}
-    //       onPress={() => navigation.navigate("Room", { id: id })}
-    //     >
-    //       <Text style={styles.buttonText}>Enter</Text>
-    //     </TouchableOpacity>
-    //   );
-    // } else {
-    return (
-      <TouchableOpacity style={styles.button} onPress={() => null}>
-        <Text style={styles.buttonText}>Enter</Text>
-      </TouchableOpacity>
-    );
-    // }
+    if (data == undefined) {
+      return (
+        <TouchableOpacity style={styles.button} onPress={() => null}>
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    } else if (data.length == people) {
+      return (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            var roomRef = db.doc(id);
+            roomRef.update({
+              isLocked: true,
+            });
+            navigation.navigate("Room", { id: id });
+          }}
+        >
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity style={styles.button} onPress={() => null}>
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    }
   }
 
+  //Retrieving user data
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -102,6 +127,33 @@ export default function LobbyScreen({ navigation, route }) {
     );
   }
 
+  //Handle event if back button is pressed (android)
+  useBackHandler(() => {
+    if (navigation.isFocused()) {
+      Alert.alert("", "Sure you want to exit the lounge?", [
+        {
+          text: "Ok",
+          onPress: () => {
+            var obj = {
+              catName: name,
+              catType: catType,
+              username: username,
+            };
+            var cityRef = db.doc(id);
+            cityRef.update({
+              userData: firebase.firestore.FieldValue.arrayRemove(obj),
+            });
+            navigation.navigate("Home");
+          },
+        },
+        { text: "Cancel" },
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Lobby</Text>
@@ -114,22 +166,25 @@ export default function LobbyScreen({ navigation, route }) {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 18,
-          textAlign: "center",
-          marginTop: 10,
-        }}
-      >
-        {/* {data.length}/{people} */}
-      </Text>
+      {data == undefined ? (
+        <Text style={styles.countText}>0/{people}</Text>
+      ) : (
+        <Text style={styles.countText}>
+          {data.length}/{people}
+        </Text>
+      )}
       {enterWhenFull()}
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          navigation.navigate("Room", { id: id, userData: userData })
-        }
+
+        onPress={() => {
+          var roomRef = db.doc(id);
+          roomRef.update({
+            isLocked: true,
+          });
+          navigation.navigate("Room", { id: id });
+        }}
+
       >
         <Text style={styles.buttonText}>Enter anyway</Text>
       </TouchableOpacity>
@@ -180,5 +235,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     textTransform: "uppercase",
+  },
+  countText: {
+    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 10,
   },
 });

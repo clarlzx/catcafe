@@ -59,6 +59,12 @@ export default function CodeScreen({ navigation, route }) {
                     Alert.alert("Room full", "Please try another room.", [
                       { text: "OK" },
                     ]);
+                  } else if (doc.data().isLocked) {
+                    Alert.alert(
+                      "Room already in session",
+                      "Please try another room.",
+                      [{ text: "OK" }]
+                    );
                   } else {
                     navigation.navigate("Choose Cat", {
                       id: code,
