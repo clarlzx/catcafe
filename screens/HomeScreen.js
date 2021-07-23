@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Icon } from "react-native-elements";
-import firebase from "../database/firebaseDB";
+import { useBackHandler } from "@react-native-community/hooks";
 
 export default function HomeScreen({ navigation, route }) {
   const { userData } = route.params;
+
+  // useBackHandler(() => {
+  //   Alert.alert("", "Do you want to exit this app?", [
+  //     { text: "Ok", onPress: () => BackHandler.exitApp() },
+  //     { text: "Cancel" },
+  //   ]);
+  //   return true;
+  // });
 
   return (
     <View style={styles.container}>
