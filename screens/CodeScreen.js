@@ -1,13 +1,43 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, {useState} from "react";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import firebase from '../database/firebaseDB';
 
 export default function CodeScreen({ navigation }) {
+
+  code = "";
+
+  const Code = () => {
+    return (
+      <View style={{padding: 10}}>
+        <TextInput
+          style={{height: 40, borderWidth: 2, padding: 5}}
+          placeholder="Group Code"
+          onChangeText={text => code = text}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text>Group Code</Text>
+
+      <Code></Code>
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Choose Cat")}
+        onPress={() => {
+          firebase.firestore().collection("rooms").where("id", "==", code).get().then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              navigation.navigate("Choose Cat");
+            } else {
+              Alert.alert("Invalid Group Code", "Please try again.",[
+                { text: "OK" }
+              ]);
+            }
+          }
+        )
+        }}
       >
         <Text style={styles.text}>Confirm</Text>
       </TouchableOpacity>
