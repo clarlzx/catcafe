@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import firebase from "../database/firebaseDB";
 
 export default function GeneratedCodeScreen({ navigation, route }) {
-  const { minHour, minMin, maxHour, maxMin, people } = route.params;
+  const { minHour, minMin, maxHour, maxMin, people, userData } = route.params;
 
   //Just for testing
   // {
@@ -68,6 +68,7 @@ export default function GeneratedCodeScreen({ navigation, route }) {
       maxHour: maxHour,
       maxMin: maxMin,
       people: people,
+      username: userData.userName,
     })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
