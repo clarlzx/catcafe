@@ -16,7 +16,7 @@ export default function CreateRoomScreen({ navigation, route }) {
 
   function RenderSelector({ people, setPeople }) {
     function increment() {
-      if (people >= 20) {
+      if (people >= 9) {
         return null;
       } else {
         setPeople(people + 1);
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    marginTop: Constants.statusBarHeight,
     padding: 20,
+    paddingTop: Constants.statusBarHeight,
     justifyContent: "center",
   },
   text: {
