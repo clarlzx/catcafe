@@ -23,13 +23,13 @@ export default function LobbyScreen({ navigation, route }) {
       roomRef.set(
         {
           userData: [
-            ...retrievedUserData,
             { username: userData.userName, catType: catType, catName: name },
+            ...retrievedUserData,
           ],
         },
         { merge: true }
       );
-    }, []);
+    });
   });
 
   function enterWhenFull() {
@@ -61,8 +61,8 @@ export default function LobbyScreen({ navigation, route }) {
       .doc(id)
       .onSnapshot((doc) => {
         const firebaseData = doc.data().userData;
-        setCount(firebaseData.length);
         setData(firebaseData);
+        setCount(data.length);
 
         return firebaseData;
       });
@@ -110,7 +110,7 @@ export default function LobbyScreen({ navigation, route }) {
       <Text
         style={{
           fontWeight: "bold",
-          fontSize: "18",
+          fontSize: 18,
           textAlign: "center",
           marginTop: 10,
         }}
