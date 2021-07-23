@@ -44,26 +44,22 @@ export default function CodeScreen({ navigation, route }) {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          console.log("pressed");
           firebase
             .firestore()
             .collection("rooms")
             .where("id", "==", code)
             .get()
             .then((querySnapshot) => {
-              console.log("?");
               if (!querySnapshot.empty) {
                 querySnapshot.forEach((doc) => {
                   if (
                     doc.data().userData != undefined &&
                     doc.data().userData.length >= doc.data().people
                   ) {
-                    console.log("hello");
                     Alert.alert("Room full", "Please try another room.", [
                       { text: "OK" },
                     ]);
                   } else {
-                    console.log("isValid");
                     navigation.navigate("Choose Cat", {
                       id: code,
                       userData: userData,
@@ -71,7 +67,6 @@ export default function CodeScreen({ navigation, route }) {
                   }
                 });
               } else {
-                console.log("invalid");
                 Alert.alert("Invalid Group Code", "Please try again.", [
                   { text: "OK" },
                 ]);

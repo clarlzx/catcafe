@@ -12,9 +12,9 @@ import Cat from "../components/Cat";
 import { useBackHandler } from "@react-native-community/hooks";
 
 export default function RoomScreen({ navigation, route }) {
-  const { id } = route.params;
+  const { id, userData } = route.params;
 
-  const [userData, setUserData] = useState([]);
+  const [usersData, setUsersData] = useState([]);
 
   useBackHandler(() => {
     if (navigation.isFocused()) {
@@ -35,7 +35,7 @@ export default function RoomScreen({ navigation, route }) {
     .doc("iu0TUc")
     .get()
     .then((doc) => {
-      setUserData(doc.data().userData);
+      setUsersData(doc.data().userData);
     });
 
   //   const userData = [{catName: "Tim", catType: "calico", userName: "Anon"},
@@ -47,7 +47,7 @@ export default function RoomScreen({ navigation, route }) {
       <Text style={{ padding: 40 }}>Hi I am a room where cats roam</Text>
 
       <FlatList
-        data={userData}
+        data={usersData}
         renderItem={({ item }) => (
           <View>
             <Text style={{ textAlign: "center" }}>
@@ -77,7 +77,9 @@ export default function RoomScreen({ navigation, route }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Chat")}
+          onPress={() =>
+            navigation.navigate("Chat", { id: id, userData: userData })
+          }
         >
           <Text style={styles.text}>Chat</Text>
         </TouchableOpacity>
