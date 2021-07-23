@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,34 +15,49 @@ import Cat from "../components/Cat";
 export default function NameCatScreen({ navigation, route }) {
   const { catType, id, userData, people } = route.params;
   const [name, setName] = useState("");
+  const [haveName, setHaveName] = useState(false);
+
+  useEffect(() => {
+    if (name != "") {
+      setHaveName(true);
+    } else {
+      setHaveName(false);
+    }
+  });
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>Meow.{"\n"}Name your cat!</Text>
-        <Cat
-          catName={catType}
-          style={{
-            aspectRatio: 1,
-            height: 200,
-            alignSelf: "center",
-          }}
-        />
+        <View style={styles.catContainer}>
+          <Cat
+            catName={catType}
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+              resizeMode: "contain",
+            }}
+          />
+        </View>
+
         <Input placeholder="Name" onChangeText={(name) => setName(name)} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            navigation.navigate("Lobby", {
-              catType: catType,
-              name: name,
-              id: id,
-              userData: userData,
-              people: people,
-            })
-          }
-        >
-          <Text style={styles.buttontText}>Confirm</Text>
-        </TouchableOpacity>
+        {haveName && (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              navigation.navigate("Lobby", {
+                catType: catType,
+                name: name,
+                id: id,
+                userData: userData,
+                people: people,
+              })
+            }
+          >
+            <Text style={styles.buttontText}>Confirm</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </TouchableWithoutFeedback>
   );
@@ -72,5 +87,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     margin: 20,
+  },
+  catContainer: {
+    height: 220,
+    width: "100%",
+    marginLeft: 6,
+    marginBottom: 20,
   },
 });
