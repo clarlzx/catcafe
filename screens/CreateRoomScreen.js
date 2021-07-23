@@ -11,7 +11,9 @@ import Constants from "expo-constants";
 import { Input } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
 
-export default function CreateRoomScreen({ navigation }) {
+export default function CreateRoomScreen({ navigation, route }) {
+  const { userData } = route.params;
+
   function RenderSelector({ people, setPeople }) {
     function increment() {
       if (people >= 20) {
@@ -60,6 +62,7 @@ export default function CreateRoomScreen({ navigation }) {
         maxHour: maxHour,
         maxMin: maxMin,
         people: people,
+        userData: userData,
       });
     }
   }
@@ -110,7 +113,7 @@ export default function CreateRoomScreen({ navigation }) {
             maxLength={2}
           />
         </View>
-        <Text style={styles.text}>Set number of people</Text>
+        <Text style={styles.text}>Set number of people (Including you!)</Text>
         <RenderSelector people={people} setPeople={setPeople} />
         <TouchableOpacity
           style={styles.confirmationButton}

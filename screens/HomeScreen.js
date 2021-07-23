@@ -32,13 +32,17 @@ export default function HomeScreen({ navigation, route }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Create Room")}
+        onPress={() =>
+          navigation.navigate("Create Room", { userData: userData })
+        }
       >
         <Text style={styles.text}>Create</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("My Cats")}
+        onPress={() =>
+          navigation.navigate("My Cats", { userData: userData.userName })
+        }
       >
         <Text style={styles.text}>My Cats</Text>
       </TouchableOpacity>
