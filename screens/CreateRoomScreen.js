@@ -113,7 +113,7 @@ export default function CreateRoomScreen({ navigation, route }) {
             maxLength={2}
           />
         </View>
-        <Text style={styles.text}>Set number of people</Text>
+        <Text style={styles.text}>Set number of people (Including you!)</Text>
         <RenderSelector people={people} setPeople={setPeople} />
         <TouchableOpacity
           style={styles.confirmationButton}
