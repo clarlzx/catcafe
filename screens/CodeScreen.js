@@ -42,9 +42,17 @@ export default function CodeScreen({ navigation, route }) {
             .get()
             .then((querySnapshot) => {
               if (!querySnapshot.empty) {
-                navigation.navigate("Choose Cat", {
-                  id: code,
-                  userData: userData,
+                querySnapshot.forEach((doc) => {
+                  if (doc.data().userData.length >= doc.data().people) {
+                    Alert.alert("Room full", "Please try another room.", [
+                      { text: "OK" },
+                    ]);
+                  } else {
+                    navigation.navigate("Choose Cat", {
+                      id: code,
+                      userData: userData,
+                    });
+                  }
                 });
               } else {
                 Alert.alert("Invalid Group Code", "Please try again.", [
