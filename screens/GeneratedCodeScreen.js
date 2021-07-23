@@ -69,7 +69,6 @@ export default function GeneratedCodeScreen({ navigation, route }) {
         maxHour: maxHour,
         maxMin: maxMin,
         people: people,
-        userData: { username: userData.userName },
       })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -91,6 +90,7 @@ export default function GeneratedCodeScreen({ navigation, route }) {
         onPress={() =>
           navigation.navigate("Choose Cat", {
             id: result,
+            userData: userData,
           })
         }
       >
