@@ -91,6 +91,7 @@ export default function GeneratedCodeScreen({ navigation, route }) {
           navigation.navigate("Choose Cat", {
             id: result,
             userData: userData,
+            people: people,
           })
         }
       >

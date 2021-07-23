@@ -10,7 +10,7 @@ import Constants from "expo-constants";
 import Cat from "../components/Cat";
 
 export default function ChooseCatScreen({ navigation, route }) {
-  const { id, userData } = route.params;
+  const { id, userData, people } = route.params;
 
   function ListItem({ item }) {
     return (
@@ -21,6 +21,7 @@ export default function ChooseCatScreen({ navigation, route }) {
             catType: item.name,
             id: id,
             userData: userData,
+            people: people,
           })
         }
       >
