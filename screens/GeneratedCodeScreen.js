@@ -68,7 +68,7 @@ export default function GeneratedCodeScreen({ navigation, route }) {
       maxHour: maxHour,
       maxMin: maxMin,
       people: people,
-      username: userData.userName,
+      userData: { username: userData.userName },
     })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
