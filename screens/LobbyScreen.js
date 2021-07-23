@@ -65,7 +65,7 @@ export default function LobbyScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            var roomRef = db.collection("cities").doc(id);
+            var roomRef = db.doc(id);
             roomRef.update({
               isLocked: true,
             });
@@ -172,7 +172,13 @@ export default function LobbyScreen({ navigation, route }) {
       {enterWhenFull()}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Room", { id: id })}
+        onPress={() => {
+          var roomRef = db.doc(id);
+          roomRef.update({
+            isLocked: true,
+          });
+          navigation.navigate("Room", { id: id });
+        }}
       >
         <Text style={styles.buttonText}>Enter anyway</Text>
       </TouchableOpacity>
