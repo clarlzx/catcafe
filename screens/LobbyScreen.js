@@ -43,22 +43,28 @@ export default function LobbyScreen({ navigation, route }) {
   }, []);
 
   function enterWhenFull() {
-    // if (data.length == people) {
-    //   return (
-    //     <TouchableOpacity
-    //       style={styles.button}
-    //       onPress={() => navigation.navigate("Room", { id: id })}
-    //     >
-    //       <Text style={styles.buttonText}>Enter</Text>
-    //     </TouchableOpacity>
-    //   );
-    // } else {
-    return (
-      <TouchableOpacity style={styles.button} onPress={() => null}>
-        <Text style={styles.buttonText}>Enter</Text>
-      </TouchableOpacity>
-    );
-    // }
+    if (data == undefined) {
+      return (
+        <TouchableOpacity style={styles.button} onPress={() => null}>
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    } else if (data.length == people) {
+      return (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Room", { id: id })}
+        >
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity style={styles.button} onPress={() => null}>
+          <Text style={styles.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      );
+    }
   }
 
   const [data, setData] = useState([]);
@@ -114,16 +120,13 @@ export default function LobbyScreen({ navigation, route }) {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 18,
-          textAlign: "center",
-          marginTop: 10,
-        }}
-      >
-        {/* {data.length}/{people} */}
-      </Text>
+      {data == undefined ? (
+        <Text style={styles.countText}>0/{people}</Text>
+      ) : (
+        <Text style={styles.countText}>
+          {data.length}/{people}
+        </Text>
+      )}
       {enterWhenFull()}
       <TouchableOpacity
         style={styles.button}
@@ -178,5 +181,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     textTransform: "uppercase",
+  },
+  countText: {
+    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 10,
   },
 });
