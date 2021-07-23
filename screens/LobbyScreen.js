@@ -19,40 +19,49 @@ export default function LobbyScreen({ navigation, route }) {
   useEffect(() => {
     roomRef.get().then((doc) => {
       const retrievedUserData = doc.data().userData;
-
-      roomRef.set(
-        {
-          userData: [
-            { username: userData.userName, catType: catType, catName: name },
-            ...retrievedUserData,
-          ],
-        },
-        { merge: true }
-      );
+      if (retrievedUserData == undefined) {
+        roomRef.set(
+          {
+            userData: [
+              { username: userData.userName, catType: catType, catName: name },
+            ],
+          },
+          { merge: true }
+        );
+      } else {
+        roomRef.set(
+          {
+            userData: [
+              { username: userData.userName, catType: catType, catName: name },
+              ...retrievedUserData,
+            ],
+          },
+          { merge: true }
+        );
+      }
     });
-  });
+  }, []);
 
   function enterWhenFull() {
-    if (count == people) {
-      return (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Room", { id: id })}
-        >
-          <Text style={styles.buttonText}>Enter</Text>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <TouchableOpacity style={styles.button} onPress={() => null}>
-          <Text style={styles.buttonText}>Enter</Text>
-        </TouchableOpacity>
-      );
-    }
+    // if (data.length == people) {
+    //   return (
+    //     <TouchableOpacity
+    //       style={styles.button}
+    //       onPress={() => navigation.navigate("Room", { id: id })}
+    //     >
+    //       <Text style={styles.buttonText}>Enter</Text>
+    //     </TouchableOpacity>
+    //   );
+    // } else {
+    return (
+      <TouchableOpacity style={styles.button} onPress={() => null}>
+        <Text style={styles.buttonText}>Enter</Text>
+      </TouchableOpacity>
+    );
+    // }
   }
 
   const [data, setData] = useState([]);
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const dataListener = firebase
@@ -62,8 +71,6 @@ export default function LobbyScreen({ navigation, route }) {
       .onSnapshot((doc) => {
         const firebaseData = doc.data().userData;
         setData(firebaseData);
-        setCount(data.length);
-
         return firebaseData;
       });
 
@@ -115,7 +122,7 @@ export default function LobbyScreen({ navigation, route }) {
           marginTop: 10,
         }}
       >
-        {count}/{people}
+        {/* {data.length}/{people} */}
       </Text>
       {enterWhenFull()}
       <TouchableOpacity
