@@ -8,15 +8,20 @@ export default function LobbyScreen({ navigation, route }) {
   const db = firebase.firestore().collection("rooms");
   var roomRef = db.doc(id);
   useEffect(() => {
-    roomRef.set(
-      {
-        userData: [
-          { username: userData.userName, catType: catType, catName: name },
-        ],
-      },
-      { merge: true }
-    );
-  }, []);
+    roomRef.get().then((doc) => {
+      const retrievedUserData = doc.data().userData;
+
+      roomRef.set(
+        {
+          userData: [
+            ...retrievedUserData,
+            { username: userData.userName, catType: catType, catName: name },
+          ],
+        },
+        { merge: true }
+      );
+    }, []);
+  });
 
   // useEffect(() => {
   //   db.where("id", "==", id)
