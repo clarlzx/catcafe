@@ -6,14 +6,18 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Alert,
+  BackHandler,
 } from "react-native";
 import firebase from "../database/firebaseDB";
+import { useBackHandler } from "@react-native-community/hooks";
 import Constants from "expo-constants";
 import Cat from "../components/Cat";
 
 export default function LobbyScreen({ navigation, route }) {
   const { catType, name, id, userData, people } = route.params;
 
+  //Save selected data into firebase
   const db = firebase.firestore().collection("rooms");
   var roomRef = db.doc(id);
   useEffect(() => {
@@ -22,8 +26,13 @@ export default function LobbyScreen({ navigation, route }) {
       if (retrievedUserData == undefined) {
         roomRef.set(
           {
+            isLocked: false,
             userData: [
-              { username: userData.userName, catType: catType, catName: name },
+              {
+                username: userData.userName,
+                catType: catType,
+                catName: name,
+              },
             ],
           },
           { merge: true }
@@ -31,6 +40,7 @@ export default function LobbyScreen({ navigation, route }) {
       } else {
         roomRef.set(
           {
+            isLocked: false,
             userData: [
               { username: userData.userName, catType: catType, catName: name },
               ...retrievedUserData,
@@ -42,6 +52,7 @@ export default function LobbyScreen({ navigation, route }) {
     });
   }, []);
 
+  //Conditional entering of the rooms
   function enterWhenFull() {
     if (data == undefined) {
       return (
@@ -53,7 +64,13 @@ export default function LobbyScreen({ navigation, route }) {
       return (
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Room", { id: id })}
+          onPress={() => {
+            var roomRef = db.collection("cities").doc(id);
+            roomRef.update({
+              isLocked: true,
+            });
+            navigation.navigate("Room", { id: id });
+          }}
         >
           <Text style={styles.buttonText}>Enter</Text>
         </TouchableOpacity>
@@ -67,6 +84,7 @@ export default function LobbyScreen({ navigation, route }) {
     }
   }
 
+  //Retrieving user data
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -107,6 +125,30 @@ export default function LobbyScreen({ navigation, route }) {
       </View>
     );
   }
+
+  //Handle event if back button is pressed (android)
+  useBackHandler(() => {
+    if (navigation.isFocused()) {
+      Alert.alert("", "Sure you want to exit the lounge?", [
+        {
+          text: "Ok",
+          onPress: () => {
+            var cityRef = db.doc(id);
+            cityRef.update({
+              userData: firebase.firestore.FieldValue.arrayRemove(
+                userData.userName
+              ),
+            });
+            BackHandler.exitApp();
+          },
+        },
+        { text: "Cancel" },
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  });
 
   return (
     <View style={styles.container}>
