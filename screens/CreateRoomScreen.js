@@ -12,9 +12,7 @@ import { Input } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
 
 export default function CreateRoomScreen({ navigation }) {
-  function renderSelector() {
-    const [people, setPeople] = useState(0);
-
+  function RenderSelector({ people, setPeople }) {
     function increment() {
       if (people >= 20) {
         return null;
@@ -44,6 +42,28 @@ export default function CreateRoomScreen({ navigation }) {
     );
   }
 
+  const [minHour, setMinHour] = useState(0);
+  const [minMin, setMinMin] = useState(0);
+  const [maxHour, setMaxHour] = useState(0);
+  const [maxMin, setMaxMin] = useState(0);
+  const [people, setPeople] = useState(0);
+  const [isBlank, setBoolean] = useState(false);
+
+  function buttonPressed() {
+    if (minHour == "" || minMin == "" || (maxHour == "") | (maxMin == "")) {
+      setBoolean(true);
+    } else {
+      setBoolean(false);
+      return navigation.navigate("Generated Code", {
+        minHour: minHour,
+        minMin: minMin,
+        maxHour: maxHour,
+        maxMin: maxMin,
+        people: people,
+      });
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -54,11 +74,19 @@ export default function CreateRoomScreen({ navigation }) {
             keyboardType="numeric"
             label="Hours"
             containerStyle={{ justifyContent: "flex-start", flex: 1 }}
+            onChangeText={(text) => {
+              setMinHour(text);
+            }}
+            maxLength={2}
           />
           <Input
             keyboardType="numeric"
             label="Minutes"
             containerStyle={{ justifyContent: "flex-end", flex: 1 }}
+            onChangeText={(text) => {
+              setMinMin(text);
+            }}
+            maxLength={2}
           />
         </View>
         <Text style={styles.text}>Set maximum study time</Text>
@@ -67,21 +95,40 @@ export default function CreateRoomScreen({ navigation }) {
             keyboardType="numeric"
             label="Hours"
             containerStyle={{ justifyContent: "flex-start", flex: 1 }}
+            onChangeText={(text) => {
+              setMaxHour(text);
+            }}
+            maxLength={2}
           />
           <Input
             keyboardType="numeric"
             label="Minutes"
             containerStyle={{ justifyContent: "flex-end", flex: 1 }}
+            onChangeText={(text) => {
+              setMaxMin(text);
+            }}
+            maxLength={2}
           />
         </View>
         <Text style={styles.text}>Set number of people</Text>
-        {renderSelector()}
+        <RenderSelector people={people} setPeople={setPeople} />
         <TouchableOpacity
           style={styles.confirmationButton}
-          onPress={() => navigation.navigate("Choose Cat")}
+          onPress={buttonPressed}
         >
           <Text style={styles.buttonText}>Create room!</Text>
         </TouchableOpacity>
+        {isBlank ? (
+          <Text
+            style={{
+              fontSize: 18,
+              textAlign: "center",
+              color: "red",
+            }}
+          >
+            Ensure no fields are blank!
+          </Text>
+        ) : null}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -106,11 +153,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   confirmationButton: {
+    borderRadius: 20,
+    padding: 20,
+    marginTop: 20,
     backgroundColor: "coral",
-    padding: 10,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    width: "80%",
+    alignSelf: "center",
   },
   buttonText: {
     fontSize: 18,
