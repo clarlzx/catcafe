@@ -18,8 +18,17 @@ export default function CodeScreen({ navigation, route }) {
     return (
       <View style={{ padding: 10 }}>
         <TextInput
-          style={{ height: 40, borderWidth: 2, padding: 5 }}
+          style={{
+            height: 50,
+            borderWidth: 2,
+            paddingVertical: 5,
+            paddingHorizontal: 30,
+            borderRadius: 3,
+            fontSize: 18,
+            textAlign: "center",
+          }}
           placeholder="Group Code"
+          maxLength={6}
           onChangeText={(text) => (code = text)}
         />
       </View>
@@ -28,7 +37,7 @@ export default function CodeScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text>Group Code</Text>
+      <Text style={styles.header}>Enter your code</Text>
 
       <Code></Code>
 
@@ -74,6 +83,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
+  },
+  header: {
+    fontSize: 20,
   },
   text: {
     fontSize: 32,
