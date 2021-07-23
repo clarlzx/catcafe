@@ -26,7 +26,9 @@ export default function HomeScreen({ navigation, route }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Group Code")}
+        onPress={() =>
+          navigation.navigate("Group Code", { userData: userData })
+        }
       >
         <Text style={styles.text}>Join</Text>
       </TouchableOpacity>
