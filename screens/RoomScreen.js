@@ -10,6 +10,7 @@ import {
 import firebase from "../database/firebaseDB";
 import Cat from "../components/Cat";
 import { useBackHandler } from "@react-native-community/hooks";
+import { Dimensions } from "react-native";
 
 export default function RoomScreen({ navigation, route }) {
   const { id, userData } = route.params;
@@ -32,7 +33,7 @@ export default function RoomScreen({ navigation, route }) {
   firebase
     .firestore()
     .collection("rooms")
-    .doc("iu0TUc")
+    .doc(id)
     .get()
     .then((doc) => {
       setUsersData(doc.data().userData);
@@ -44,24 +45,31 @@ export default function RoomScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={{ padding: 40 }}>Hi I am a room where cats roam</Text>
+      <Text style={{ paddingTop: 40, paddingBottom: 30 }}>
+        Hi I am a room where cats roam
+      </Text>
 
       <FlatList
         data={usersData}
         renderItem={({ item }) => (
           <View>
-            <Text style={{ textAlign: "center" }}>
+            <Text
+              style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}
+            >
               {item.username}'s cat {item.catName}
             </Text>
-            <Cat
-              catName={item.catType}
-              style={{
-                padding: 5,
-                height: 250,
-                width: 150,
-                transform: [{ scale: 0.7 }],
-              }}
-            />
+
+            <View style={styles.catContainer}>
+              <Cat
+                catName={item.catType}
+                style={{
+                  flex: 1,
+                  width: null,
+                  height: null,
+                  resizeMode: "contain",
+                }}
+              />
+            </View>
           </View>
         )}
         numColumns={2}
@@ -95,7 +103,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D7BFAE",
-    justifyContent: "center",
     alignItems: "center",
   },
   text: {
@@ -110,5 +117,12 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingTop: 100,
+  },
+  catContainer: {
+    height: 180,
+    width: Dimensions.get("screen").width * 0.4,
+    justifyContent: "center",
+    marginHorizontal: 10,
+    marginTop: 10,
   },
 });
