@@ -176,6 +176,7 @@ export default function LobbyScreen({ navigation, route }) {
       {enterWhenFull()}
       <TouchableOpacity
         style={styles.button}
+
         onPress={() => {
           var roomRef = db.doc(id);
           roomRef.update({
@@ -183,6 +184,7 @@ export default function LobbyScreen({ navigation, route }) {
           });
           navigation.navigate("Room", { id: id });
         }}
+
       >
         <Text style={styles.buttonText}>Enter anyway</Text>
       </TouchableOpacity>

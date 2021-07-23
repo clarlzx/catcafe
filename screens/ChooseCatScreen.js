@@ -32,16 +32,23 @@ export default function ChooseCatScreen({ navigation, route }) {
             alignItems: "center",
           }}
         >
-          <Text style={styles.catName}>{item.name} cat</Text>
-          <Cat
-            catName={item.name}
-            style={{
-              aspectRatio: 1,
-              height: 100,
-              flex: 2,
-              // backgroundColor: "lightpink",
-            }}
-          />
+          {item.name != "russianBlue" && (
+            <Text style={styles.catName}>{item.name} cat</Text>
+          )}
+          {item.name == "russianBlue" && (
+            <Text style={styles.catName}>Russian{"\n"}blue cat</Text>
+          )}
+          <View style={{ height: 150, width: 150 }}>
+            <Cat
+              catName={item.name}
+              style={{
+                flex: 1,
+                width: null,
+                height: null,
+                resizeMode: "contain",
+              }}
+            />
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -129,7 +136,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "90%",
     backgroundColor: "lightgrey",
-    padding: 20,
+    paddingLeft: 20,
+    paddingTop: 25,
+    paddingBottom: 25,
     margin: 10,
     borderRadius: 10,
   },

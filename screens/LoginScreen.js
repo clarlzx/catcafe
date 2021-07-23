@@ -20,22 +20,11 @@ export default function LoginScreen({ navigation, route }) {
   const [userData, setUserData] = useState({});
 
   useBackHandler(() => {
-    if (navigation.isFocused()) {
-      Alert.alert("", "Do you want to exit this app?", [
-        { text: "Ok", onPress: () => BackHandler.exitApp() },
-        { text: "Cancel" },
-      ]);
-      return true;
-    } else {
-      return false;
-    }
-
-    //uncomment this so that homescreen cannot go back to login screen too
-    // Alert.alert("", "Do you want to exit this app?", [
-    //   { text: "Ok", onPress: () => BackHandler.exitApp() },
-    //   { text: "Cancel" },
-    // ]);
-    // return true;
+    Alert.alert("", "Do you want to exit this app?", [
+      { text: "Ok", onPress: () => BackHandler.exitApp() },
+      { text: "Cancel" },
+    ]);
+    return true;
   });
 
   useEffect(() => {

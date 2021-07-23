@@ -17,10 +17,9 @@ import {
 import { Feather } from "@expo/vector-icons";
 import firebase from "../database/firebaseDB";
 
-export default function ChatScreen({ navigation }) {
-  const roomId = "65JZMp"; //change this
-  const uid = "xZqcdjuy6qTfsYU07JxZwIua1YV2"; //change this
-  const userName = "clarlzx"; //change this
+export default function ChatScreen({ navigation, route }) {
+  const { id, userData } = route.params;
+  const { userName, uid } = userData;
 
   const [messages, setMessages] = useState([]);
 
@@ -28,7 +27,7 @@ export default function ChatScreen({ navigation }) {
     const messagesListener = firebase
       .firestore()
       .collection("rooms")
-      .doc(roomId)
+      .doc(id)
       .collection("messages")
       .orderBy("createdAt", "desc")
       .onSnapshot((querySnapshot) => {
@@ -64,7 +63,7 @@ export default function ChatScreen({ navigation }) {
     firebase
       .firestore()
       .collection("rooms")
-      .doc(roomId)
+      .doc(id)
       .collection("messages")
       .add({
         text,
