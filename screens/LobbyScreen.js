@@ -16,6 +16,7 @@ import Cat from "../components/Cat";
 
 export default function LobbyScreen({ navigation, route }) {
   const { catType, name, id, userData, people } = route.params;
+  const username = userData.userName;
 
   //Save selected data into firebase
   const db = firebase.firestore().collection("rooms");
@@ -133,13 +134,16 @@ export default function LobbyScreen({ navigation, route }) {
         {
           text: "Ok",
           onPress: () => {
+            var obj = {
+              catName: name,
+              catType: catType,
+              username: username,
+            };
             var cityRef = db.doc(id);
             cityRef.update({
-              userData: firebase.firestore.FieldValue.arrayRemove(
-                userData.userName
-              ),
+              userData: firebase.firestore.FieldValue.arrayRemove(obj),
             });
-            BackHandler.exitApp();
+            navigation.navigate("Home");
           },
         },
         { text: "Cancel" },
