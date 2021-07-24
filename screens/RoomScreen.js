@@ -11,6 +11,8 @@ import firebase from "../database/firebaseDB";
 import Cat from "../components/Cat";
 import { useBackHandler } from "@react-native-community/hooks";
 import { Dimensions } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
 
 export default function RoomScreen({ navigation, route }) {
   const { id, userData } = route.params;
@@ -43,6 +45,7 @@ export default function RoomScreen({ navigation, route }) {
   // {catName: "MM", catType: "royal", userName: "Hey"},
   // {catName: "meimei", catType: "black", userName: "Hello"}];
 
+  const [isFeeding, setFeeding] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={{ paddingTop: 40, paddingBottom: 30 }}>
@@ -60,6 +63,17 @@ export default function RoomScreen({ navigation, route }) {
             </Text>
 
             <View style={styles.catContainer}>
+              {isFeeding ? (
+                <Animatable.Text
+                  animation="pulse"
+                  easing="ease-out"
+                  iterationCount={3}
+                  direction="alternate"
+                  onAnimationEnd={() => setFeeding(false)}
+                >
+                  <AntDesign name="heart" size={20} color="red" />
+                </Animatable.Text>
+              ) : null}
               <Cat
                 catName={item.catType}
                 style={{
@@ -91,7 +105,10 @@ export default function RoomScreen({ navigation, route }) {
         >
           <Text style={styles.text}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => null}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setFeeding(true)}
+        >
           <Text style={styles.text}>Feed</Text>
         </TouchableOpacity>
       </View>
