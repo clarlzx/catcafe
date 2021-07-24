@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -41,6 +41,27 @@ export default function RoomScreen({ navigation, route }) {
     .then((doc) => {
       setUsersData(doc.data().userData);
     });
+
+  const [maxHour, setMaxHour] = useState(0);
+  const [maxMin, setMaxMin] = useState(0);
+  const db = firebase.firestore().collection("rooms");
+  var docRef = db.doc(id);
+  useEffect(() => {
+    docRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setMaxHour(doc.data().maxHour);
+          setMaxMin(doc.data().maxMin);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  }, []);
 
   //   const userData = [{catName: "Tim", catType: "calico", userName: "Anon"},
   // {catName: "MM", catType: "royal", userName: "Hey"},
@@ -96,7 +117,10 @@ export default function RoomScreen({ navigation, route }) {
         numColumns={2}
         styles={styles.list}
       />
-
+      <Text style={{ fontSize: 32, fontWeight: "bold", textAlign: "center" }}>
+        Maximum time:{"\n"}
+        {("0" + maxHour).slice(-2)} Hours {("0" + maxMin).slice(-2)} Mins
+      </Text>
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
           style={styles.button}

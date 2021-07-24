@@ -12,6 +12,9 @@ import { useBackHandler } from "@react-native-community/hooks";
 
 export default function HomeScreen({ navigation, route }) {
   const { userData } = route.params;
+  {
+    console.log(userData.uid);
+  }
 
   useBackHandler(() => {
     if (navigation.isFocused()) {
