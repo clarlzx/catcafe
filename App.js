@@ -18,6 +18,8 @@ import CreateRoomScreen from "./screens/CreateRoomScreen";
 import MyCatsScreen from "./screens/MyCatsScreen";
 import ProfilePage from "./screens/ProfilePage";
 import GeneratedCodeScreen from "./screens/GeneratedCodeScreen";
+import MinimumSuccessScreen from "./screens/MinimumSuccessScreen";
+import MaximumSuccessScreen from "./screens/MaximumSuccessScreen";
 
 const Stack = createStackNavigator();
 LogBox.ignoreAllLogs();
@@ -126,6 +128,20 @@ export default function App() {
         <Stack.Screen
           name="Profile"
           component={ProfilePage}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Success Minimum"
+          component={MinimumSuccessScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Success Maximum"
+          component={MaximumSuccessScreen}
           options={{
             headerShown: false,
           }}

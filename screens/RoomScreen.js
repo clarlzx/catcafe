@@ -91,7 +91,10 @@ export default function RoomScreen({ navigation, route }) {
         >
           <Text style={styles.text}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => null}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Success Maximum")}
+        >
           <Text style={styles.text}>Feed</Text>
         </TouchableOpacity>
       </View>
