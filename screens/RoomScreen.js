@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  Image,
 } from "react-native";
 import firebase from "../database/firebaseDB";
 import Cat from "../components/Cat";
 import { useBackHandler } from "@react-native-community/hooks";
 import { Dimensions } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
 
 export default function RoomScreen({ navigation, route }) {
   const { id, userData } = route.params;
@@ -43,6 +46,13 @@ export default function RoomScreen({ navigation, route }) {
   // {catName: "MM", catType: "royal", userName: "Hey"},
   // {catName: "meimei", catType: "black", userName: "Hello"}];
 
+  const [feedCount, setCount] = useState(1);
+  setInterval(incrementFood, 1800000);
+  function incrementFood() {
+    setCount(feedCount + 1);
+  }
+
+  const [isFeeding, setFeeding] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={{ paddingTop: 40, paddingBottom: 30 }}>
@@ -60,6 +70,17 @@ export default function RoomScreen({ navigation, route }) {
             </Text>
 
             <View style={styles.catContainer}>
+              {isFeeding ? (
+                <Animatable.Text
+                  animation="pulse"
+                  easing="ease-out"
+                  iterationCount={3}
+                  direction="alternate"
+                  onAnimationEnd={() => setFeeding(false)}
+                >
+                  <AntDesign name="heart" size={20} color="red" />
+                </Animatable.Text>
+              ) : null}
               <Cat
                 catName={item.catType}
                 style={{
@@ -91,9 +112,25 @@ export default function RoomScreen({ navigation, route }) {
         >
           <Text style={styles.text}>Chat</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => null}>
-          <Text style={styles.text}>Feed</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            style={{ justifyContent: "center", alignItems: "center" }}
+            onPress={() => {
+              if (feedCount > 0) {
+                setCount(feedCount - 1);
+                setFeeding(true);
+              }
+            }}
+          >
+            <Image
+              source={require("../assets/food.png")}
+              style={{ height: 50, width: 100 }}
+            />
+          </TouchableOpacity>
+          <Text style={{ textAlign: "center", marginTop: 15 }}>
+            Feed x{feedCount}
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -114,6 +151,8 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     backgroundColor: "coral",
+    justifyContent: "center",
+    alignItems: "center",
   },
   list: {
     paddingTop: 100,
