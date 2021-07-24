@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,11 +11,16 @@ import firebase from "../database/firebaseDB";
 import Cat from "../components/Cat";
 import { useBackHandler } from "@react-native-community/hooks";
 import { Dimensions } from "react-native";
+import TimerDisplay from "../components/TimerDisplay";
 
 export default function RoomScreen({ navigation, route }) {
   const { id, userData } = route.params;
 
   const [usersData, setUsersData] = useState([]);
+  const [minHour, setMinHour] = useState();
+  const [minMin, setMinMin] = useState();
+  const [maxHour, setMaxHour] = useState();
+  const [maxMin, setMaxMin] = useState();
 
   useBackHandler(() => {
     if (navigation.isFocused()) {
@@ -37,6 +42,10 @@ export default function RoomScreen({ navigation, route }) {
     .get()
     .then((doc) => {
       setUsersData(doc.data().userData);
+      setMinHour(parseInt(doc.data().minHour));
+      setMinMin(parseInt(doc.data().minMin));
+      setMaxHour(parseInt(doc.data().maxHour));
+      setMaxMin(parseInt(doc.data().maxMin));
     });
 
   //   const userData = [{catName: "Tim", catType: "calico", userName: "Anon"},
@@ -49,32 +58,55 @@ export default function RoomScreen({ navigation, route }) {
         Hi I am a room where cats roam
       </Text>
 
-      <FlatList
-        data={usersData}
-        renderItem={({ item }) => (
-          <View>
-            <Text
-              style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}
-            >
-              {item.username}'s cat {item.catName}
-            </Text>
+      {maxHour != undefined && (
+        <View>
+          <Text style={styles.minText}>Min:</Text>
+          <TimerDisplay
+            initialHour={minHour}
+            initialMin={minMin}
+            backgroundColor={"#7a6853"}
+          />
+          {/* <Text style={styles.minText}>Min:</Text>
+          <TimerDisplay
+            initialHour={minHour}
+            initialMin={minMin}
+            backgroundColor={"#60827c"}
+          /> */}
+        </View>
+      )}
 
-            <View style={styles.catContainer}>
-              <Cat
-                catName={item.catType}
+      {usersData != undefined && (
+        <FlatList
+          data={usersData}
+          renderItem={({ item }) => (
+            <View>
+              <Text
                 style={{
-                  flex: 1,
-                  width: null,
-                  height: null,
-                  resizeMode: "contain",
+                  textAlign: "center",
+                  fontSize: 15,
+                  fontWeight: "bold",
                 }}
-              />
+              >
+                {item.username}'s cat {item.catName}
+              </Text>
+
+              <View style={styles.catContainer}>
+                <Cat
+                  catName={item.catType}
+                  style={{
+                    flex: 1,
+                    width: null,
+                    height: null,
+                    resizeMode: "contain",
+                  }}
+                />
+              </View>
             </View>
-          </View>
-        )}
-        numColumns={2}
-        styles={styles.list}
-      />
+          )}
+          numColumns={2}
+          styles={styles.list}
+        />
+      )}
 
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
@@ -124,5 +156,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 10,
     marginTop: 10,
+  },
+  minText: {
+    textAlign: "center",
   },
 });
